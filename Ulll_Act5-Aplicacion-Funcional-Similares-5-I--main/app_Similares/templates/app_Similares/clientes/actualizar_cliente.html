@@ -1,0 +1,47 @@
+
+{% extends 'app_Similares/base.html' %}
+
+{% block title %}Actualizar Cliente - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0"><i class="fas fa-user-edit me-2"></i> Actualizar Cliente: {{ cliente.nombre }} {{ cliente.apellido }}</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'realizar_actualizacion_cliente' cliente.pk %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ cliente.nombre }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="apellido" class="form-label">Apellido:</label>
+                    <input type="text" class="form-control" id="apellido" name="apellido" value="{{ cliente.apellido }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ cliente.email }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono:</label>
+                    <input type="text" class="form-control" id="telefono" name="telefono" value="{{ cliente.telefono|default_if_none:"" }}">
+                </div>
+                <div class="mb-3">
+                    <label for="direccion" class="form-label">Dirección:</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion" value="{{ cliente.direccion|default_if_none:"" }}">
+                </div>
+                <div class="mb-3">
+                    <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ cliente.fecha_nacimiento|date:'Y-m-d'|default_if_none:"" }}">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-warning btn-lg text-dark"><i class="fas fa-sync-alt me-2"></i> Actualizar Cliente</button>
+                    <a href="{% url 'ver_clientes' %}" class="btn btn-secondary btn-lg"><i class="fas fa-arrow-left me-2"></i> Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

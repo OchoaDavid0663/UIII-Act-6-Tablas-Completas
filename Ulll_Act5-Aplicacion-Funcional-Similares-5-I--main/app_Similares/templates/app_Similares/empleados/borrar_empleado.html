@@ -1,0 +1,34 @@
+<!-- app_Similares/templates/empleados/borrar_empleado.html -->
+{% extends 'app_Similares/base.html' %}
+{% block title %}Desactivar Empleado - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 500px;">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Confirmar Desactivación de Empleado</h3>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Estás a punto de desactivar al empleado:</p>
+            <h4 class="text-center mb-3"><strong>{{ empleado.nombre }} {{ empleado.apellido }}</strong></h4>
+            <p class="card-text">Puesto: {{ empleado.puesto }}</p>
+            <p class="card-text">Email: {{ empleado.email }}</p>
+            <p class="text-warning text-center fw-bold">El empleado quedará inactivo, pero sus ventas históricas se mantendrán.</p>
+            
+            <div class="alert alert-warning text-center" role="alert">
+                ¿Estás seguro de que deseas continuar?
+            </div>
+
+            <form method="post" action="{% url 'borrar_empleado' empleado.pk %}" class="d-grid gap-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning btn-lg">
+                    <i class="fas fa-user-slash me-2"></i> Sí, Desactivar Empleado
+                </button>
+                <a href="{% url 'ver_empleados' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

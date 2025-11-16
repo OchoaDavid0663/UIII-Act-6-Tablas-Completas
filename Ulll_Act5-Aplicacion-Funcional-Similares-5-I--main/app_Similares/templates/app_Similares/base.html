@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Similares{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa; /* Color de fondo suave */
+        }
+        .content {
+            flex: 1;
+            padding-top: 70px; /* Para que el contenido no quede debajo del navbar fijo */
+            padding-bottom: 60px; /* Para que el contenido no quede debajo del footer fijo */
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #343a40; /* Color oscuro para el footer */
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        /* Estilos personalizados para el navbar */
+        .navbar-custom {
+            background-color: #6c757d; /* Gris oscuro suave */
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .navbar-brand:hover, .nav-link:hover {
+            color: #d1ecf1 !important; /* Un tono más claro al pasar el mouse */
+        }
+        .dropdown-menu {
+            background-color: #f8f9fa;
+        }
+        .dropdown-item {
+            color: #343333;
+        }
+        .dropdown-item:hover {
+            background-color: #e2e6ea;
+            color: #212529;
+        }
+        /* Colores para tablas y formularios */
+        .table {
+            background-color: #ffffff;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0,0,0,.05);
+        }
+        .btn-primary { background-color: #007bff; border-color: #007bff; }
+        .btn-primary:hover { background-color: #0056b3; border-color: #0056b3; }
+        .btn-success { background-color: #28a745; border-color: #28a745; }
+        .btn-success:hover { background-color: #218838; border-color: #218838; }
+        .btn-info { background-color: #17a2b8; border-color: #17a2b8; }
+        .btn-info:hover { background-color: #138496; border-color: #117a8b; }
+        .btn-warning { background-color: #ffc107; border-color: #ffc107; }
+        .btn-warning:hover { background-color: #e0a800; border-color: #e0a800; }
+        .btn-danger { background-color: #dc3545; border-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; border-color: #c82333; }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+    </style>
+</head>
+<body>
+    {% include 'app_Similares/navbar.html' %} {# Incluye el navbar #}
+
+    <div class="content container mt-4">
+        {% block content %}
+        {# El contenido específico de cada página irá aquí #}
+        {% endblock %}
+    </div>
+
+    {% include 'app_Similares/footer.html' %} {# Incluye el footer #}
+
+    <!-- Bootstrap JS y Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

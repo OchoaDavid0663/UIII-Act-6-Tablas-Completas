@@ -1,0 +1,107 @@
+{% extends 'app_Similares/base.html' %}
+
+{% block title %}Ver Ventas - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center" style="color: #e61308;">
+        <i class="fas fa-cash-register me-2"></i> Registro de Ventas
+    </h2>
+    <div class="text-end mb-3">
+        <a href="{% url 'agregar_venta' %}" class="btn btn-danger text-white" >
+            <i class="fas fa-plus-circle me-2"></i> Registrar Nueva Venta
+        </a>
+    </div>
+
+    {% if ventas %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Factura #</th>
+                    <th>Cliente</th>
+                    <th>Empleado</th>  <!-- NUEVA COLUMNA -->
+                    <th>Medicamentos</th>
+                    <th>Productos</th>
+                    <th>Total</th>
+                    <th>Método Pago</th>
+                    <th>Estado</th>
+                    <th>Fecha Venta</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td>{{ venta.numero_factura }}</td>
+                    <td>{{ venta.cliente.nombre }} {{ venta.cliente.apellido }}</td>
+                    <td>
+                        {% if venta.empleado %}
+                            <span title="{{ venta.empleado.cargo }}">
+                                <i class="fas fa-user-tie text-primary"></i>
+                                {{ venta.empleado.nombre }} {{ venta.empleado.apellido }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted"><em>Sin empleado</em></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <ul class="list-unstyled mb-0 small">
+                            {% for medicamento in venta.medicamentos.all %}
+                            <li>
+                                <a href="{% url 'ver_medicamentos' %}" title="Ver detalles de {{ medicamento.nombre }}" class="text-decoration-none">
+                                    <i class="fas fa-capsules me-1 text-primary"></i> 
+                                    {{ medicamento.nombre }} (${{ medicamento.precio|floatformat:2 }})
+                                </a>
+                            </li>
+                            {% empty %}
+                            <li>No hay medicamentos</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <ul class="list-unstyled mb-0 small">
+                            {% for producto in venta.productos.all %}
+                            <li>
+                                <a href="{% url 'ver_productos' %}" title="Ver detalles de {{ producto.nombre }}" class="text-decoration-none">
+                                    <i class="fas fa-capsules me-1 text-primary"></i> 
+                                    {{ producto.nombre }} (${{ producto.precio|floatformat:2 }})
+                                </a>
+                            </li>
+                            {% empty %}
+                            <li>No hay productos</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>${{ venta.total|floatformat:2 }}</td>
+                    <td>{{ venta.get_metodo_pago_display }}</td>
+                    <td>
+                        {% if venta.estado == 'COMPLETADA' %}
+                            <span class="badge bg-success">{{ venta.get_estado_display }}</span>
+                        {% elif venta.estado == 'PENDIENTE' %}
+                            <span class="badge bg-warning text-dark">{{ venta.get_estado_display }}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{{ venta.get_estado_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ venta.fecha_venta|date:"d/m/Y H:i" }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'actualizar_venta' venta.pk %}" class="btn btn-warning btn-sm me-1" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'borrar_venta' venta.pk %}" class="btn btn-danger btn-sm" title="Eliminar">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        No hay ventas registradas aún. ¡Registra una nueva venta!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

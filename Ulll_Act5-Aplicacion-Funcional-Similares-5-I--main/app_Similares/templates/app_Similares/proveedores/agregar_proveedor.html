@@ -1,0 +1,52 @@
+<!-- app_Similares/templates/proveedores/agregar_proveedor.html -->
+{% extends 'app_Similares/base.html' %}
+{% block title %}Agregar Proveedor - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 800px;">
+        <div class="card-header bg-alert text-white" style="background-color: #bd09ea;">
+            <h3 class="mb-0"><i class="fas fa-truck me-2"></i> Agregar Proveedor</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre de la Empresa</label>
+                        <input type="text" name="nombre_empresa" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Persona de Contacto</label>
+                        <input type="text" name="contacto" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="telefono" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Dirección</label>
+                        <textarea name="direccion" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">RFC</label>
+                        <input type="text" name="rfc" class="form-control" maxlength="13" required>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-success btn-lg text-white">
+                        <i class="fas fa-check-circle me-2"></i> Guardar Proveedor
+                    </button>
+                    <a href="{% url 'ver_proveedores' %}" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'app_Similares/base.html' %}
+
+{% block title %}Ver Medicamentos - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center" style="color: #28a745;">
+        <i class="fas fa-capsules me-2"></i> Medicamentos en Inventario
+    </h2>
+    <div class="text-end mb-3">
+        <a href="{% url 'agregar_medicamento' %}" class="btn btn-success">
+            <i class="fas fa-plus-circle me-2"></i> Agregar Nuevo Medicamento
+        </a>
+    </div>
+
+    {% if medicamentos %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Laboratorio</th>
+                    <th>Proveedor</th>  <!-- NUEVA COLUMNA -->
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Vencimiento</th>
+                    <th>Cód. Barras</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for medicamento in medicamentos %}
+                <tr>
+                    <td>{{ medicamento.id }}</td>
+                    <td>{{ medicamento.nombre }}</td>
+                    <td>{{ medicamento.laboratorio }}</td>
+                    <td>
+                        {% if medicamento.proveedor %}
+                            <span class="badge bg-primary">{{ medicamento.proveedor.nombre_empresa }}</span>
+                        {% else %}
+                            <span class="text-muted">Sin proveedor</span>
+                        {% endif %}
+                    </td>
+                    <td>${{ medicamento.precio|floatformat:2 }}</td>
+                    <td>
+                        {% if medicamento.stock > 0 %}
+                            <span class="text-success fw-bold">{{ medicamento.stock }}</span>
+                        {% else %}
+                            <span class="text-danger fw-bold">0</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ medicamento.fecha_vencimiento|date:"d/m/Y" }}</td>
+                    <td><code>{{ medicamento.codigo_barras }}</code></td>
+                    <td class="text-center">
+                        <a href="{% url 'actualizar_medicamento' medicamento.pk %}" class="btn btn-warning btn-sm me-1" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'borrar_medicamento' medicamento.pk %}" class="btn btn-danger btn-sm" title="Eliminar">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        No hay medicamentos registrados en el inventario. ¡Añade uno nuevo!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

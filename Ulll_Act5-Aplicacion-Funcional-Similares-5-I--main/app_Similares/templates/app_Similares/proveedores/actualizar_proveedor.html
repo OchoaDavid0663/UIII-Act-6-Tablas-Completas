@@ -1,0 +1,58 @@
+<!-- app_Similares/templates/proveedores/actualizar_proveedor.html -->
+{% extends 'app_Similares/base.html' %}
+{% block title %}Actualizar Proveedor - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 800px;">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0"><i class="fas fa-sync-alt me-2"></i> Actualizar Proveedor</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'realizar_actualizacion_proveedor' proveedor.pk %}">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre de la Empresa</label>
+                        <input type="text" name="nombre_empresa" class="form-control" value="{{ proveedor.nombre_empresa }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Persona de Contacto</label>
+                        <input type="text" name="contacto" class="form-control" value="{{ proveedor.contacto }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="telefono" class="form-control" value="{{ proveedor.telefono }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ proveedor.email }}" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Dirección</label>
+                        <textarea name="direccion" class="form-control" rows="2" required>{{ proveedor.direccion }}</textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">RFC</label>
+                        <input type="text" name="rfc" class="form-control" value="{{ proveedor.rfc }}" maxlength="13" required>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" type="checkbox" name="activo" id="activo" {% if proveedor.activo %}checked{% endif %}>
+                            <label class="form-check-label" for="activo">Proveedor Activo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-warning btn-lg text-dark">
+                        <i class="fas fa-sync-alt me-2"></i> Actualizar Proveedor
+                    </button>
+                    <a href="{% url 'ver_proveedores' %}" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

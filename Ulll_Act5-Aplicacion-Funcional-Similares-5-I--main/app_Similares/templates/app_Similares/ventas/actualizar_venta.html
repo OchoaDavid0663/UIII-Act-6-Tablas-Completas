@@ -1,0 +1,125 @@
+<!-- app_Similares/templates/app_Similares/ventas/actualizar_venta.html -->
+{% extends 'app_Similares/base.html' %}
+{% block title %}Actualizar Venta - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 1000px;">
+        <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0">
+                Actualizar Venta #{{ venta.numero_factura }}
+            </h3>
+        </div>
+        <div class="card-body">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'realizar_actualizacion_venta' venta.pk %}">
+                {% csrf_token %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Cliente</label>
+                        <select name="cliente" class="form-select" required>
+                            {% for c in clientes %}
+                                <option value="{{ c.id }}" {% if venta.cliente.id == c.id %}selected{% endif %}>
+                                    {{ c.nombre }} {{ c.apellido }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Empleado</label>
+                        <select name="empleado" class="form-select">
+                            <option value="">-- Sin empleado --</option>
+                            {% for e in empleados %}
+                                <option value="{{ e.id }}" {% if venta.empleado and venta.empleado.id == e.id %}selected{% endif %}>
+                                    {{ e.nombre }} {{ e.apellido }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Método de Pago</label>
+                        <select name="metodo_pago" class="form-select" required>
+                            <option value="EFECTIVO" {% if venta.metodo_pago == 'EFECTIVO' %}selected{% endif %}>Efectivo</option>
+                            <option value="TARJETA" {% if venta.metodo_pago == 'TARJETA' %}selected{% endif %}>Tarjeta</option>
+                            <option value="TRANSFERENCIA" {% if venta.metodo_pago == 'TRANSFERENCIA' %}selected{% endif %}>Transferencia</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Estado</label>
+                        <select name="estado" class="form-select" required>
+                            <option value="COMPLETADA" {% if venta.estado == 'COMPLETADA' %}selected{% endif %}>Completada</option>
+                            <option value="PENDIENTE" {% if venta.estado == 'PENDIENTE' %}selected{% endif %}>Pendiente</option>
+                            <option value="CANCELADA" {% if venta.estado == 'CANCELADA' %}selected{% endif %}>Cancelada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- MEDICAMENTOS -->
+                <div class="mb-3">
+                    <label class="form-label">Medicamentos</label>
+                    <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                        {% for med in medicamentos %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="medicamentos" value="{{ med.id }}"
+                                   id="med{{ med.id }}"
+                                   {% if med in venta.medicamentos.all %}checked{% endif %}>
+                            <label class="form-check-label" for="med{{ med.id }}">
+                                {{ med.nombre }} - ${{ med.precio }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- PRODUCTOS -->
+                <div class="mb-3">
+                    <label class="form-label">Productos</label>
+                    <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                        {% for prod in productos %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="productos" value="{{ prod.id }}"
+                                   id="prod{{ prod.id }}"
+                                   {% if prod in venta.productos.all %}checked{% endif %}>
+                            <label class="form-check-label" for="prod{{ prod.id }}">
+                                {{ prod.nombre }} - ${{ prod.precio }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observaciones</label>
+                    <textarea name="observaciones" class="form-control" rows="3">{{ venta.observaciones }}</textarea>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Total actual: ${{ venta.total }}</strong>
+                    <small class="d-block">Se recalculará al guardar.</small>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-warning btn-lg text-dark">
+                        Actualizar Venta
+                    </button>
+                    <a href="{% url 'ver_ventas' %}" class="btn btn-secondary btn-lg">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

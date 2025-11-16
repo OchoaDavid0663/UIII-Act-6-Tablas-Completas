@@ -1,0 +1,62 @@
+{% extends 'app_Similares/base.html' %}
+{% block title %}Proveedores - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center" style="color: #bd09ea;"><i class="fas fa-truck me-2"></i> Proveedores</h2>
+    <div class="text-end mb-3">
+        <a href="{% url 'agregar_proveedor' %}" class="btn btn-info text-white" style="background-color: #bd09ea;">
+            <i class="fas fa-plus-circle me-2"></i> Agregar Proveedor
+        </a>
+    </div>
+
+    {% if proveedores %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Empresa</th>
+                    <th>Contacto</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>RFC</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in proveedores %}
+                <tr>
+                    <td><strong>{{ p.nombre_empresa }}</strong></td>
+                    <td>{{ p.contacto }}</td>
+                    <td>{{ p.telefono }}</td>
+                    <td>{{ p.email }}</td>
+                    <td><code>{{ p.rfc }}</code></td>
+                    <td>
+                        {% if p.activo %}
+                        <span class="badge bg-success">Activo</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Inactivo</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <a href="{% url 'actualizar_proveedor' p.pk %}" class="btn btn-warning btn-sm me-1" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'borrar_proveedor' p.pk %}" class="btn btn-danger btn-sm" title="Desactivar"
+                        onclick="return confirm('¿Desactivar proveedor?')">
+                            <i class="fas fa-ban"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        No hay proveedores activos. <a href="{% url 'agregar_proveedor' %}">¡Registra uno!</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

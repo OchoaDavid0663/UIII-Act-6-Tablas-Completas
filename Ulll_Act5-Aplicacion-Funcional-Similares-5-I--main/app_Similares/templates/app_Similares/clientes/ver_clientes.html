@@ -1,0 +1,61 @@
+
+{% extends 'app_Similares/base.html' %}
+
+{% block title %}Ver Clientes - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center" style="color: #007bff;"><i class="fas fa-users me-2"></i> Clientes Registrados</h2>
+    <div class="text-end mb-3">
+        <a href="{% url 'agregar_cliente' %}" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i> Agregar Nuevo Cliente</a>
+    </div>
+
+    {% if clientes %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Completo</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Fecha Nac.</th>
+                    <th>Registrado En</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.id }}</td>
+                    <td>{{ cliente.nombre }} {{ cliente.apellido }}</td>
+                    <td>{{ cliente.email }}</td>
+                    <td>{{ cliente.telefono|default_if_none:"N/A" }}</td>
+                    <td>{{ cliente.direccion|default_if_none:"N/A" }}</td>
+                    <td>{{ cliente.fecha_nacimiento|default_if_none:"N/A" }}</td>
+                    <td>{{ cliente.registrado_en|date:"d/m/Y H:i" }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'actualizar_cliente' cliente.pk %}" class="btn btn-warning btn-sm me-1" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <!-- Botón de borrar con un formulario para enviar POST -->
+                        <form action="{% url 'borrar_cliente' cliente.pk %}" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de que quieres borrar a este cliente?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        No hay clientes registrados aún. ¡Añade uno nuevo!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

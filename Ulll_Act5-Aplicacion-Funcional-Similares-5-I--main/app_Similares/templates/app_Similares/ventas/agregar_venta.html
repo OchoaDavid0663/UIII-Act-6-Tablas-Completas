@@ -1,0 +1,151 @@
+<!-- app_Similares/templates/app_Similares/ventas/agregar_venta.html -->
+{% extends 'app_Similares/base.html' %}
+{% block title %}Agregar Venta - Similares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 1000px;">
+        <div class="card-header bg-danger text-white">
+            <h3 class="mb-0">
+                Nueva Venta
+            </h3>
+        </div>
+        <div class="card-body">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'realizar_agregar_venta' %}">
+                {% csrf_token %}
+
+                <!-- CLIENTE Y EMPLEADO -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Cliente *</label>
+                        <select name="cliente" class="form-select" required>
+                            <option value="">-- Seleccionar cliente --</option>
+                            {% for c in clientes %}
+                                <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }} ({{ c.email }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Empleado</label>
+                        <select name="empleado" class="form-select">
+                            <option value="">-- Sin empleado --</option>
+                            {% for e in empleados %}
+                                <option value="{{ e.id }}">{{ e.nombre }} {{ e.apellido }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- MEDICAMENTOS -->
+                <div class="mb-3">
+                    <label class="form-label">Medicamentos</label>
+                    <div class="border rounded p-3" style="max-height: 180px; overflow-y: auto; background-color: #f8f9fa;">
+                        {% for med in medicamentos %}
+                        <div class="form-check">
+                            <input class="form-check-input medicamento-check" type="checkbox" 
+                                   name="medicamentos" value="{{ med.id }}" id="med{{ med.id }}"
+                                   data-precio="{{ med.precio }}">
+                            <label class="form-check-label" for="med{{ med.id }}">
+                                {{ med.nombre }} - <strong>${{ med.precio }}</strong>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- PRODUCTOS -->
+                <div class="mb-3">
+                    <label class="form-label">Productos</label>
+                    <div class="border rounded p-3" style="max-height: 180px; overflow-y: auto; background-color: #f8f9fa;">
+                        {% for prod in productos %}
+                        <div class="form-check">
+                            <input class="form-check-input producto-check" type="checkbox" 
+                                   name="productos" value="{{ prod.id }}" id="prod{{ prod.id }}"
+                                   data-precio="{{ prod.precio }}">
+                            <label class="form-check-label" for="prod{{ prod.id }}">
+                                {{ prod.nombre }} - <strong>${{ prod.precio }}</strong>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- MÉTODO, ESTADO, OBSERVACIONES -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Método de Pago *</label>
+                        <select name="metodo_pago" class="form-select" required>
+                            <option value="EFECTIVO">Efectivo</option>
+                            <option value="TARJETA">Tarjeta</option>
+                            <option value="TRANSFERENCIA">Transferencia</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Estado</label>
+                        <select name="estado" class="form-select">
+                            <option value="COMPLETADA" selected>Completada</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Número de Factura *</label>
+                        <input type="text" name="numero_factura" class="form-control" placeholder="FAC-0001" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observaciones</label>
+                    <textarea name="observaciones" class="form-control" rows="2" placeholder="Opcional..."></textarea>
+                </div>
+
+                <!-- TOTAL EN VIVO -->
+                <div class="alert alert-primary text-center">
+                    <h5>Total: $<span id="total-venta">0.00</span></h5>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        Registrar Venta
+                    </button>
+                    <a href="{% url 'ver_ventas' %}" class="btn btn-secondary btn-lg">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript para calcular total en tiempo real -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checks = document.querySelectorAll('.medicamento-check, .producto-check');
+    const totalSpan = document.getElementById('total-venta');
+
+    function calcularTotal() {
+        let total = 0;
+        checks.forEach(check => {
+            if (check.checked) {
+                total += parseFloat(check.dataset.precio);
+            }
+        });
+        totalSpan.textContent = total.toFixed(2);
+    }
+
+    checks.forEach(check => {
+        check.addEventListener('change', calcularTotal);
+    });
+
+    calcularTotal(); // Inicial
+});
+</script>
+{% endblock %}
